@@ -1,6 +1,8 @@
 const express = require("express")
 const cors = require("cors")
+
 const { productRouter } = require("./routes/product.route")
+const { connection } = require("./config/db")
 
 require("dotenv").config()
 
@@ -16,6 +18,13 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1", productRouter)
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, async () => {
+    try {
+        await connection
+        console.log("Successfully Connected DB")
+    } catch (err) {
+        console.log("Error while Connecting DB")
+        console.log(err)
+    }
     console.log(`Server is running on port ${process.env.PORT}`)
 })
